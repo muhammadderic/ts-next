@@ -17,6 +17,9 @@ export default async function Home() {
           <li key={startup._id}>
             <h5>{startup.title}</h5>
             <p>{startup.description}</p>
+            <Link href={`/startup/${startup._id}`}>
+              Detail
+            </Link>
           </li>
         ))}
       </ul>
