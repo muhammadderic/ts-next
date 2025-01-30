@@ -1,4 +1,7 @@
-import { createSlug } from "./utils";
+"use server"
+
+import { writeClient } from "@/sanity/lib/write-client";
+import { createSlug, parseServerActionResponse } from "./utils";
 
 export const createStartup = async (form: FormData) => {
   // TODO: Add auth, if user is not signed in, return error
@@ -21,10 +24,19 @@ export const createStartup = async (form: FormData) => {
       },
     };
 
-    // TODO: Write startup to Sanity
+    const result = await writeClient.create({ _type: "startup", ...startup })
 
-    return startup;
+    return parseServerActionResponse({
+      ...result,
+      error: "",
+      status: "SUCCESS",
+    });
   } catch (error) {
     console.log(error);
+
+    return parseServerActionResponse({
+      error: JSON.stringify(error),
+      status: "ERROR",
+    })
   }
 }
